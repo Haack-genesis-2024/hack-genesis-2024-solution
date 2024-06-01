@@ -3,7 +3,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 import dataclasses
 
-DATABASE_URI = 'sqlite:///chat.db'
+DATABASE_URI = 'sqlite:///db/chat.db'
 Base = declarative_base()
 
 class Conversation(Base):

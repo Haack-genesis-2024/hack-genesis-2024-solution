@@ -14,7 +14,7 @@ CORS(app, origins=["http://localhost:8080", "http://localhost:5173", "http://loc
 
 app.secret_key = read_secret('SESSION_KEY')
 app.config['PERMANENT_SESSION_LIFETIME'] =  timedelta(days=1)
-app.config['SESSION_COOKIE_SAMESITE'] = 'None'
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 
 @app.before_request
 def before_request():

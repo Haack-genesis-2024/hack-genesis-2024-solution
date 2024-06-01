@@ -7,7 +7,7 @@ type ChatMessageProps = {
 };
 
 const ChatMessage: FC<ChatMessageProps> = memo(({ message }) => (
-  <HStack align="flex-start" gap={2} w="100%" width="md">
+  <HStack align="flex-start" gap={2} w="100%" width="100%">
     <Flex w={8} h={8} align="center" justify="center">
       {message.role === "AI" ? "🤖" : "👤"}
     </Flex>
