@@ -10,7 +10,7 @@ from flask_cors import CORS
 app = Flask(__name__)
 app.secret_key = read_secret('SESSION_KEY')
 
-CORS(app, resources={r"/*": {"origins": "http://localhost:8080"}})
+CORS(app, resources={r"/*": {"origins": ["http://localhost:8080", "http://localhost:5173"]}})
 
 @app.before_request
 def before_request():
@@ -41,12 +41,12 @@ def upload_file():
     return 'File successfully uploaded!', 200
 
 @app.route('/files', methods=['GET'])
-def get_files():
+def get_files_handler():
     files = get_files()
     return jsonify(files)
 
 @app.route('/files/<file_name>', methods=['DELETE'])
-def delete_file(file_name: str):
+def delete_file_handler(file_name: str):
     try:
         delete_file(file_name)
         return "", 204

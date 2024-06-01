@@ -1,17 +1,20 @@
 import { FC } from "react";
-import { FileRecord } from "../types";
 import { HStack, Text, Button } from "@chakra-ui/react";
 
 export type FileItemProps = {
-  fileRecord: FileRecord;
-  onDelete: (fileRecord: FileRecord) => void;
+  fileTitle: string;
+  onDelete: (fileTitle: string) => void;
 };
 
-const FileItem: FC<FileItemProps> = ({ fileRecord, onDelete }) => {
+const FileItem: FC<FileItemProps> = ({ fileTitle, onDelete }) => {
   return (
-    <HStack align="center" justify="space-between" p={2}>
-      <Text>{fileRecord.title}</Text>
-      <Button variant="outline" onClick={() => onDelete(fileRecord)}>
+    <HStack align="center" justify="space-between" py={2} w="100%">
+      <Text isTruncated>{fileTitle}</Text>
+      <Button
+        flexShrink={0}
+        variant="outline"
+        onClick={() => onDelete(fileTitle)}
+      >
         Удалить
       </Button>
     </HStack>
