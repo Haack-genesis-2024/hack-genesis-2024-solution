@@ -15,7 +15,7 @@ def before_request():
         session['user_id'] = str(uuid.uuid4())
 
 @app.route("/logout")
-def index():
+def logout():
     delete_conversation(session['user_id'])
     session.pop('user_id', None)
     return 'OK', 200
@@ -55,8 +55,11 @@ def chat_with_ai():
     message = request.json.get('message')
   
     if message:
-        response_message = chat(session['user_id'], message)
-        return response_message, 200
+        try:
+            response_message = chat(session['user_id'], message)
+            return response_message, 200
+        except Exception as e:
+            return str(e), 500
     else:
         return "No message provided", 400
 
