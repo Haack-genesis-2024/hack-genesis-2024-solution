@@ -4,10 +4,13 @@ from secrets_service import read_secret
 from conversations_service import delete_conversation
 from ai_service import chat
 import uuid
+from flask_cors import CORS
 
 
 app = Flask(__name__)
 app.secret_key = read_secret('SESSION_KEY')
+
+CORS(app, resources={r"/*": {"origins": "http://localhost:8080"}})
 
 @app.before_request
 def before_request():
