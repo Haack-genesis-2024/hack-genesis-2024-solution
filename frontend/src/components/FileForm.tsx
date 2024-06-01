@@ -29,7 +29,7 @@ const FileForm: FC = () => {
 
   return (
     <HStack as="form" gap={2} onSubmit={onUploadFile}>
-      <Input type="file" required ref={inputFileRef} />
+      <Input type="file" required ref={inputFileRef} accept="application/pdf" />
       <Button
         isLoading={isPending}
         type="submit"
