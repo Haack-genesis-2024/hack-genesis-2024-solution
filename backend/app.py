@@ -9,21 +9,22 @@ from datetime import timedelta
 
 
 app = Flask(__name__)
+
+CORS(app, origins=["http://localhost:8080", "http://localhost:5173", "http://localhost:4173"], supports_credentials=True)
+
 app.secret_key = read_secret('SESSION_KEY')
-
-CORS(app, resources={r"/*": {"origins": ["http://localhost:8080", "http://localhost:5173", "http://localhost:4173"]}}, supports_credentials=True)
-
 app.config['PERMANENT_SESSION_LIFETIME'] =  timedelta(days=1)
+app.config['SESSION_COOKIE_SAMESITE'] = 'None'
 
 @app.before_request
 def before_request():
     if 'user_id' not in session:
-        session.permanent = True
         session['user_id'] = str(uuid.uuid4())
+        session.permanent = True
 
 @app.route("/logout")
 def logout():
-    delete_conversation(session['user_id'])
+    delete_conversation(session.get('user_id'))
     session.pop('user_id', None)
     return 'OK', 200
 
@@ -35,7 +36,6 @@ def upload_file():
     file = request.files['file']
     
     if file.filename == '':
-    
         return 'No file selected for uploading.', 400
     if file.content_type != 'application/pdf':
         return 'Uploaded file is not a PDF.', 400
@@ -60,10 +60,9 @@ def delete_file_handler(file_name: str):
 @app.route('/chat', methods=['POST'])
 def chat_handler():
     message = request.json.get('message')
-  
     if message:
         try:
-            messages = chat(session['user_id'], message)
+            messages = chat(session.get('user_id'), message)
             return jsonify(messages)
         except Exception as e:
             return str(e), 500
@@ -73,7 +72,7 @@ def chat_handler():
 
 @app.route('/chat', methods=['GET'])
 def get_conversation_handler():
-    return jsonify(get_conversation(session['user_id']))
+    return jsonify(get_conversation(session.get('user_id')))
 
 @app.route("/health")
 def index():
