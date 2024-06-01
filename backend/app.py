@@ -1,20 +1,24 @@
 from flask import Flask, session, request, jsonify
 from files_service import save_file, get_files, delete_file
 from secrets_service import read_secret
-from conversations_service import delete_conversation
+from conversations_service import delete_conversation, get_conversation
 from ai_service import chat
 import uuid
 from flask_cors import CORS
+from datetime import timedelta
 
 
 app = Flask(__name__)
 app.secret_key = read_secret('SESSION_KEY')
 
-CORS(app, resources={r"/*": {"origins": ["http://localhost:8080", "http://localhost:5173"]}})
+CORS(app, resources={r"/*": {"origins": ["http://localhost:8080", "http://localhost:5173", "http://localhost:4173"]}}, supports_credentials=True)
+
+app.config['PERMANENT_SESSION_LIFETIME'] =  timedelta(days=1)
 
 @app.before_request
 def before_request():
     if 'user_id' not in session:
+        session.permanent = True
         session['user_id'] = str(uuid.uuid4())
 
 @app.route("/logout")
@@ -54,18 +58,22 @@ def delete_file_handler(file_name: str):
         return str(e), 400
   
 @app.route('/chat', methods=['POST'])
-def chat_with_ai():
+def chat_handler():
     message = request.json.get('message')
   
     if message:
         try:
-            response_message = chat(session['user_id'], message)
-            return response_message, 200
+            messages = chat(session['user_id'], message)
+            return jsonify(messages)
         except Exception as e:
             return str(e), 500
     else:
         return "No message provided", 400
 
+
+@app.route('/chat', methods=['GET'])
+def get_conversation_handler():
+    return jsonify(get_conversation(session['user_id']))
 
 @app.route("/health")
 def index():

@@ -37,7 +37,9 @@ const FileList: FC = () => {
         Файлы
       </Heading>
       <FileForm />
-      {filesQuery.isLoading && <CircularProgress isIndeterminate />}
+      {filesQuery.isLoading && (
+        <CircularProgress isIndeterminate color="teal" />
+      )}
       {filesQuery.isError && (
         <Alert status="error">{filesQuery.error.message}</Alert>
       )}

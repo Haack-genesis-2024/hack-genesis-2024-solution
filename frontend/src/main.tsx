@@ -4,6 +4,7 @@ import ReactDOM from "react-dom/client";
 import FileList from "./components/FileList";
 import { QueryClientProvider } from "@tanstack/react-query";
 import queryClient from "./api/queryClient";
+import Chat from "./components/Chat";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -11,6 +12,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <ChakraProvider>
         <HStack minH="100vh" align="stretch" justify="flex-start">
           <FileList />
+          <Chat />
         </HStack>
       </ChakraProvider>
     </QueryClientProvider>

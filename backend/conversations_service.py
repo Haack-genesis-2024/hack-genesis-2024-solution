@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine, Column, String, Integer
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
+import dataclasses
 
 DATABASE_URI = 'sqlite:///chat.db'
 Base = declarative_base()
@@ -16,18 +17,29 @@ engine = create_engine(DATABASE_URI)
 Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 
-def get_conversation(user_id: str) -> list[tuple[str, str]]:
+@dataclasses.dataclass
+class Message:
+    id: int
+    role: str
+    content: str
+
+def get_conversation(user_id: str):
     session = Session()
-    conversations = session.query(Conversation.role, Conversation.message).filter(Conversation.user_id == user_id).all()
+    conversations_tuples = session.query(Conversation.id, Conversation.role, Conversation.message).filter(Conversation.user_id == user_id).all()
     session.close()
-    return conversations
+    return [Message(id=id, role=role, content=message) for id, role, message in conversations_tuples]
 
 def add_conversation_message(user_id: str, role: str, message: str):
     session = Session()
     new_message = Conversation(user_id=user_id, role=role, message=message)
     session.add(new_message)
+    session.flush()
+    session.refresh(new_message)
+    message_entry = Message(id=new_message.id, role=new_message.role, content=new_message.message)
     session.commit()
     session.close()
+    return message_entry
+
 
 def delete_conversation(user_id: str):
     session = Session()
