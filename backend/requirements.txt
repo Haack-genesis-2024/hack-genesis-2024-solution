@@ -50,3 +50,4 @@ opensearch-py
 pytesseract
 pillow
 accelerate
+PyMuPDF
