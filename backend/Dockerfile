@@ -24,7 +24,10 @@ RUN mkdir -p /home/appuser && chown appuser:appuser /home/appuser
 # Download dependencies
 RUN --mount=type=cache,target=/root/.cache/pip \
     --mount=type=bind,source=requirements.txt,target=requirements.txt \
-    python -m pip install -r requirements.txt
+    python -m pip install -r requirements.txt 
+RUN --mount=type=cache,target=/root/.cache/pip \
+    --mount=type=bind,source=model_init.py,target=model_init.py \
+    python model_init.py
 
 # Switch to the non-privileged user to run the application.
 USER appuser
