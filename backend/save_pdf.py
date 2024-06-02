@@ -7,8 +7,13 @@ from opensearchpy import OpenSearch
 
 def process_pdf_array(pdf_paths, opensearch_host='localhost', opensearch_port=9200):
     # Initialize the model and tokenizer
-    model = AutoModel.from_pretrained('openbmb/MiniCPM-Llama3-V-2_5', trust_remote_code=True, torch_dtype=torch.float16)
     device = torch.device("mps" if torch.has_mps else "cuda" if torch.cuda.is_available() else "cpu")
+    
+    if device.type == "cuda":
+        model = AutoModel.from_pretrained('openbmb/MiniCPM-Llama3-V-2_5', trust_remote_code=True, torch_dtype=torch.float16)
+    else:
+        model = AutoModel.from_pretrained('openbmb/MiniCPM-Llama3-V-2_5', trust_remote_code=True, low_cpu_mem_usage=True)
+        
     model.to(device)
     tokenizer = AutoTokenizer.from_pretrained('openbmb/MiniCPM-Llama3-V-2_5', trust_remote_code=True)
     model.eval()
@@ -17,7 +22,7 @@ def process_pdf_array(pdf_paths, opensearch_host='localhost', opensearch_port=92
     client = OpenSearch(
         hosts=[{'host': opensearch_host, 'port': opensearch_port}],
         http_auth=('admin', 'ox#Om!cN1*2)z=W1'),
-        use_ssl=True,
+        use_ssl=False,
         verify_certs=False,
         ssl_show_warn=False
     )

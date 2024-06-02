@@ -49,3 +49,4 @@ pymupdf
 opensearch-py
 pytesseract
 pillow
+accelerate
