@@ -78,5 +78,5 @@ def process_pdf_array(pdf_paths, opensearch_host='localhost', opensearch_port=92
             print(response)
 
 # Example usage:
-pdf_paths = ['o1.pdf']
-process_pdf_array(pdf_paths)
+# pdf_paths = ['o1.pdf']
+# process_pdf_array(pdf_paths, 'opensearch-node1')
