@@ -42,3 +42,10 @@ urllib3==2.2.1
 Werkzeug==3.0.3
 yandex-chain==0.0.8
 yarl==1.9.4
+torchvision
+transformers
+torch
+pymupdf
+opensearch-py
+pytesseract
+pillow
