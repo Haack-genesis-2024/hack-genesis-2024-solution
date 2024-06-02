@@ -6,7 +6,7 @@ from ai_service import chat
 import uuid
 from flask_cors import CORS
 from datetime import timedelta
-
+from pdf_service import process_pdf_array
 
 app = Flask(__name__)
 
@@ -41,6 +41,8 @@ def upload_file():
         return 'Uploaded file is not a PDF.', 400
     
     save_file(file)
+
+    process_pdf_array([file.filename], 'opensearch-node1')
 
     return 'File successfully uploaded!', 200
 
