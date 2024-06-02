@@ -22,7 +22,7 @@ def before_request():
         session['user_id'] = str(uuid.uuid4())
         session.permanent = True
 
-@app.route("/logout")
+@app.route("/logout", methods=['POST'])
 def logout():
     delete_conversation(session.get('user_id'))
     session.pop('user_id', None)
