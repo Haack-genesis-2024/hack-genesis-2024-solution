@@ -18,7 +18,7 @@ def format_user_conversation(user_id: str):
 def chat(user_id: str, message: str):
   user_message_entry = add_conversation_message(user_id, HUMAN, message)
 
-  ai_message = query_information(message, 'opensearch-node1')
+  ai_message = "".join(query_information(message, 'opensearch-node1'))
   ai_message_entry = add_conversation_message(user_id, AI, ai_message)
 
   return [user_message_entry, ai_message_entry]
